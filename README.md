@@ -1,4 +1,4 @@
 Haskell-Project-Euler
 =====================
 
-Solved problems in Haskell from Project Euler
+Problems from Project Euler solved in Haskell
