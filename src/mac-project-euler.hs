@@ -1,6 +1,6 @@
 -------------------------------------------------------------------
-------------------------------------- Project Euler Solved Problems
---------------------------------------- Author: Mohamed Adam Chaieb
+-- Project Euler Solved Problems
+-- Author: Mohamed Adam Chaieb
 -------------------------------------------------------------------
 
 -------------------------------------------------------------------
@@ -18,9 +18,9 @@ isMultipleOfOne (x:l) n = (isMultiple x n) || (isMultipleOfOne l n)
 
 -- Prime generator: returns a list of all the prime numbers
 primes' :: [Integer] 
-primes' = 
-	let 
-		listPrimes :: [Integer] => [Integer] 
+primes' =
+	let
+		listPrimes :: [Integer] -> [Integer] 
 		listPrimes (x:l) = x:(listPrimes (removeMultiples x l))
 		listPrimes [] = []
 
@@ -38,15 +38,25 @@ primes n = if (n>(-1)) then (take n) primes' else []
 factorial :: Integer -> Integer
 factorial n = if(n>1) then product [2..n] else 1
 
--- The Fibonacci function
-fibonacci :: Int -> Integer
-fibonacci 0 = 1
-fibonacci 1 = 2
-fibonacci n = fibonacci (n-1) + fibonacci (n-2)
+-- The Fibonacci sequence, using the analytic function form derived from the linear matrix equation form
+fibonaccis :: [Integer]
+fibonaccis = (map fibonacci [3..])
+	where
+		fibonacci :: Integer -> Integer
+		fibonacci n = round ((1/sqrt 5)*((1+sqrt 5)/2)^n-(1/sqrt 5)*((1-sqrt 5)/2)^n)
 
 -- Returns a list of all Fibonacci numbers less than a given integer
 fibonaccisUpTo :: Integer -> [Integer]
-fibonaccisUpTo n = error "Not implemented"
+fibonaccisUpTo n = fibonaccisUpTo' n 0
+	where
+		fibonaccisUpTo' :: Integer -> Int -> [Integer]
+		fibonaccisUpTo' n m = 
+			if (fibonacci m)<n then (fibonacci m):(fibonaccisUpTo' n (m+1))
+			else []
+
+--Returns the n-th Fibonacci number
+fibonacci :: Int -> Integer
+fibonacci n = fibonaccis !! n
 
 -- Contructs an integer from the given list of digits
 undigits :: [Int] -> Int
@@ -61,4 +71,4 @@ problem1 :: Integer
 problem1 = sum(filter (isMultipleOfOne [3,5]) [1..999])
 
 problem2 :: Integer
-problem2 = error "Not implemented"
+problem2 = sum(filter even (fibonaccisUpTo 4000000))
