@@ -51,7 +51,7 @@ primesUpTo n = primesUpTo' n 0
 
 -- Tests whether a number is prime (very inefficient)
 isPrime :: Integer -> Bool
-isPrime n = elem n primes'
+isPrime n = length (primeFactors n) == 1
 
 -- Returns a list of the prime factors of a given integer
 primeFactors :: Integer -> [Integer]
@@ -65,13 +65,17 @@ primeFactors n = primeFactors' n primes'
 			then x:(primeFactors' (quot n x) (x:l))
 			else primeFactors' n l
 
+-- Returns the number of divisors of a given number
+divisorsCount :: Integer -> Integer
+divisorsCount n = 2^(length (primeFactors n))
+
 -- The factorial function
 factorial :: Integer -> Integer
 factorial n = if(n>1) then product [2..n] else 1
 
 -- The Fibonacci sequence, using the analytic function form derived from the linear matrix equation form
 fibonaccis :: [Integer]
-fibonaccis = (map fibonacci [3..])
+fibonaccis = (map fibonacci [0..])
 	where
 		fibonacci :: Integer -> Integer
 		fibonacci n = round ((1/sqrt 5)*((1+sqrt 5)/2)^n-(1/sqrt 5)*((1-sqrt 5)/2)^n)
@@ -102,6 +106,10 @@ undigits (x:l) = (x*10^(length l))+(undigits l)
 isPalindrome :: (Eq a) => [a] -> Bool
 isPalindrome x = (x == reverse x)
 
+-- Returns the n-th triangle number
+triangle :: Integer -> Integer
+triangle n = sum [1..n]
+
 -------------------------------------------------------------------
 ----------------------- Problem Solutions
 -------------------------------------------------------------------
@@ -129,3 +137,13 @@ problem6 = (square (sum [1..100]))-(sum [square x | x <-[1..100]])
 
 problem7 :: Integer
 problem7 = primes' !! 10001
+
+problem8 = error "Not implemented"
+
+problem9 :: Integer
+problem9 = product (head [[a,b,c] | a<-[200..1000], b<-[a..1000], c<-[b..1000], a^2+b^2 == c^2, a+b+c == 1000])
+
+problem10 :: [Integer]
+problem10 = primesUpTo 2000000
+
+
