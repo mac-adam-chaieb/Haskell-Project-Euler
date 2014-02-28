@@ -1,13 +1,13 @@
--------------------------------------------------------------------
+-----------------------------------------------------------------------------
 -- Project Euler Solved Problems
 -- Author: Mohamed Adam Chaieb
--------------------------------------------------------------------
+-----------------------------------------------------------------------------
 
 import Data.List
 
--------------------------------------------------------------------
+-----------------------------------------------------------------------------
 -----------------------  Helper Functions
--------------------------------------------------------------------
+-----------------------------------------------------------------------------
 
 -- Divisibility predicate: checks if n is a multiple of x
 isMultiple :: Int -> Int -> Bool
@@ -54,6 +54,11 @@ primesUpTo n = primesUpTo' n 0
 -- Tests whether a number is prime (very inefficient)
 isPrime :: Int -> Bool
 isPrime n = length (primeFactors n) == 1
+
+-- Returns a list of all the sub-lists of the input list
+subLists :: [a] -> [[a]]
+subLists [] = [[]]
+subLists (x:l) = (subLists l) ++ (map (x:) (subLists l)) 
 
 -- Returns a list of the prime factors of a given Int
 primeFactors :: Int -> [Int]
@@ -119,9 +124,9 @@ isPalindrome x = (x == reverse x)
 triangle :: Int -> Int
 triangle n = sum [1..n]
 
--------------------------------------------------------------------
+-----------------------------------------------------------------------------
 ----------------------- Problem Solutions
--------------------------------------------------------------------
+-----------------------------------------------------------------------------
 
 problem1 :: Int
 problem1 = sum(filter (isMultipleOfOne [3,5]) [1..999])
@@ -152,7 +157,7 @@ problem8 = error "Not implemented"
 problem9 :: Int
 problem9 = product (head [[a,b,c] | a<-[200..1000], b<-[a..1000], c<-[b..1000], a^2+b^2 == c^2, a+b+c == 1000])
 
-problem10 :: [Int]
-problem10 = primesUpTo 2000000
+problem10 :: Int
+problem10 = sum (primesUpTo 2000000)
 
 
