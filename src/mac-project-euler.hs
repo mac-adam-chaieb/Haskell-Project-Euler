@@ -11,17 +11,16 @@ import Data.List
 
 -- Divisibility predicate: checks if n is a multiple of x
 isMultiple :: Integer -> Integer -> Bool
-isMultiple x n = (gcd x n == x)
+isMultiple x n = gcd x n == x
 
 -- Divisibility predicate: checks if n is a multiple of any of multiple numbers
 isMultipleOfOne :: [Integer] -> Integer -> Bool
-isMultipleOfOne [] n = False
-isMultipleOfOne (x:l) n = (isMultiple x n) || (isMultipleOfOne l n)
+isMultipleOfOne l n = foldl (\acc x -> if isMultiple x n then True else acc) False l
 
 -- Divisibility predicate: checks if n is a multiple of any of multiple numbers
 isMultipleOfAll :: [Integer] -> Integer -> Bool
-isMultipleOfAll [] n = False
-isMultipleOfAll (x:l) n = (isMultiple x n) && (isMultipleOfAll l n)
+isMultipleOfAll [] _ = False
+isMultipleOfAll l n = foldl (\acc x -> if isMultiple x n then acc else False) True l
 
 -- Prime generator: returns a list of all the prime numbers
 primes' :: [Integer] 
@@ -32,7 +31,7 @@ primes' = listPrimes [2..]
 		listPrimes [] = []
 
 		isNotMultiple :: Integer -> Integer -> Bool
-		isNotMultiple x n = not(isMultiple x n)
+		isNotMultiple x n = not $ isMultiple x n
 
 		removeMultiples = filter . isNotMultiple
 
@@ -73,15 +72,15 @@ primeFactors n = primeFactors' n primes'
 
 -- Returns a list of tuples where the first element is the prime factor and the second is its exponent
 primeDecompose :: Integer -> [(Integer, Int)]
-primeDecompose n = let l = primeFactors n in zip (l) (map length (group l))
+primeDecompose n = let l = primeFactors n in zip l $ map length $ group l
 
 -- Returns a list of divisors of a given number
 divisors :: Integer -> [Integer]
-divisors n = sort (map product (subLists (primeFactors n)))
+divisors n = sort $ map product $ subLists $ primeFactors n
 
 -- Returns the number of divisors of a given number
 divisorsCount :: Integer -> Integer
-divisorsCount n = 2^(length (primeFactors n))
+divisorsCount n = 2^(length $ primeFactors n)
 
 -- The factorial function
 factorial :: Integer -> Integer
@@ -91,10 +90,10 @@ factorial n
 
 -- The Fibonacci sequence, using the analytic function form derived from the linear matrix equation form
 fibonaccis :: [Integer]
-fibonaccis = (map fibonacci [0..])
+fibonaccis = map fibonacci [0..]
 	where
 		fibonacci :: Integer -> Integer
-		fibonacci n = round ((1/sqrt 5)*((1+sqrt 5)/2)^n-(1/sqrt 5)*((1-sqrt 5)/2)^n)
+		fibonacci n = round $ (1/sqrt 5)*((1+sqrt 5)/2)^n-(1/sqrt 5)*((1-sqrt 5)/2)^n
 
 -- Returns a list of all Fibonacci numbers less than a given Integer
 fibonaccisUpTo :: Integer -> [Integer]
@@ -113,7 +112,7 @@ fibonacci n = fibonaccis !! n
 digits :: Integer -> [Integer]
 digits n 
 	| n < 10 = [n] 
-	| otherwise = (digits (quot n 10))++[(mod n 10)]
+	| otherwise = (digits $ quot n 10)++[(mod n 10)]
 
 -- Contructs an Integer from the given list of digits
 undigits :: [Integer] -> Integer
@@ -130,29 +129,29 @@ triangle n = sum [1..n]
 
 -- Checks if the number is perfect
 isPerfect :: Integer -> Bool
-isPerfect n = n == sum (init (divisors n))
+isPerfect n = n == (sum $ init $ divisors n)
 
 -----------------------------------------------------------------------------
 ----------------------- Problem Solutions
 -----------------------------------------------------------------------------
 
 problem1 :: Integer
-problem1 = sum(filter (isMultipleOfOne [3,5]) [1..999])
+problem1 = sum $ filter (isMultipleOfOne [3,5]) [1..999]
 
 problem2 :: Integer
-problem2 = sum(filter even (fibonaccisUpTo 4000000))
+problem2 = sum $ filter even $ fibonaccisUpTo 4000000
 
 problem3 :: Integer
-problem3 = last (primeFactors 600851475143)
+problem3 = last $ primeFactors 600851475143
 
 problem4 :: Integer
-problem4 = last (sort(map undigits [digits (x*y)|x <- [100..999], y <- [100..999], isPalindrome (digits (x*y))]))
+problem4 = last  $ sort $ map undigits [digits (x*y)|x <- [100..999], y <- [100..999], isPalindrome (digits (x*y))]
 
 problem5 :: Integer
 problem5 = error "Not implemented"
 
 problem6 :: Integer
-problem6 = (square (sum [1..100]))-(sum [square x | x <-[1..100]])
+problem6 = (square $ sum [1..100])-(sum [square x | x <-[1..100]])
 	where
 		square :: Integer -> Integer
 		square n = n*n
@@ -163,7 +162,7 @@ problem7 = primes' !! 10001
 problem8 = error "Not implemented"
 
 problem9 :: Integer
-problem9 = product (head [[a,b,c] | a<-[200..1000], b<-[a..1000], c<-[b..1000], a^2+b^2 == c^2, a+b+c == 1000])
+problem9 = product $ head [[a,b,c] | a<-[200..1000], b<-[a..1000], c<-[b..1000], a^2+b^2 == c^2, a+b+c == 1000]
 
 problem10 :: Integer
-problem10 = sum (primesUpTo 2000000)
+problem10 = sum $ primesUpTo 2000000
