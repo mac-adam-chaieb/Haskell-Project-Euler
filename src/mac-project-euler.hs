@@ -27,18 +27,14 @@ primes' :: [Integer]
 primes' = listPrimes [2..]
 	where
 		listPrimes :: [Integer] -> [Integer] 
-		listPrimes (x:l) = x:(listPrimes (removeMultiples x l))
-		listPrimes [] = []
+		listPrimes l = foldr (\x acc -> x:(removeMultiples x acc)) [] l
 
-		isNotMultiple :: Integer -> Integer -> Bool
-		isNotMultiple x n = not $ isMultiple x n
-
-		removeMultiples = filter . isNotMultiple
+		removeMultiples x l = filter (\n -> not $ isMultiple x n) l
 
 -- Prime generator: returns a list of the n-th first prime numbers
 primes :: Int -> [Integer]
 primes n 
-	| n >= 0 = (take n) primes' 
+	| n >= 0 = take n $ primes' 
 	| otherwise = []
 
 -- Returns a list of all prime numbers less than a given Integer
@@ -57,7 +53,7 @@ isPrime n = length (primeFactors n) == 1
 -- Returns a list of all the sub-lists of the input list
 subLists :: [a] -> [[a]]
 subLists [] = [[]]
-subLists (x:l) = (subLists l) ++ (map (x:) (subLists l)) 
+subLists l = foldl (\acc x -> (map (x:) acc) ++ acc) [[]] l
 
 -- Returns a list of the prime factors of a given Integer
 primeFactors :: Integer -> [Integer]
@@ -76,7 +72,7 @@ primeDecompose n = let l = primeFactors n in zip l $ map length $ group l
 
 -- Returns a list of divisors of a given number
 divisors :: Integer -> [Integer]
-divisors n = sort $ map product $ subLists $ primeFactors n
+divisors n = nub $ sort $ map product $ subLists $ primeFactors n
 
 -- Returns the number of divisors of a given number
 divisorsCount :: Integer -> Integer
