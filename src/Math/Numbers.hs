@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- Math - Arithmetic Module
+-- Math - Numbers Module
 -- Author: Mohamed Adam Chaieb
 -----------------------------------------------------------------------------
 module Math.Numbers
