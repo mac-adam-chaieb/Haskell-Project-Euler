@@ -89,7 +89,7 @@ primeDecompose n = let l = primeFactors n in zip l $ map length $ group l
 
 -- Returns a list of divisors of a given number
 divisors :: Integer -> [Integer]
-divisors n = nub $ sort $ map product $ subLists $ primeFactors n
+divisors n = nub $ sort $ map product $ subsequences $ primeFactors n
 
 -- Returns the number of divisors of a given number
 divisorsCount :: Integer -> Integer
