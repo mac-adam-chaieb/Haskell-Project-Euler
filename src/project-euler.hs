@@ -7,7 +7,7 @@ import Math.Numbers
 import Data.List
 import qualified Data.Map as Map
 import Control.Monad as Monad
-
+--test
 -- Mapping of the problem numbers
 problems = Map.fromList [(1, problem1),
 						 (2, problem2),
