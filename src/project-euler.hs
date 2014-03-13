@@ -8,6 +8,16 @@ import Data.List
 import qualified Data.Map as Map
 import Control.Monad as Monad
 
+-- Mapping of the problem numbers
+problems = Map.fromList [(1, problem1),
+						 (2, problem2),
+						 (3, problem3),
+						 (4, problem4),
+						 (6, problem6),
+						 (7, problem7),
+						 (9, problem9),
+						 (10, problem10)]
+
 problem1 :: Integer
 problem1 = sum $ filter (isMultipleOfOne [3,5]) [1..999]
 
@@ -38,10 +48,9 @@ problem10 = sum $ primesUpTo 2000000
 
 main = do
 	putStrLn "Welcome to the Project Euler Problem Solver!"
-	putStrLn "Please enter the number of the problem you're seeking the answer for:"
-	n <- getLine
-	let problems = Map.fromList [(1, problem1), (2, problem2), (3, problem3),
-						 	 	 (4, problem4), (6, problem6), (7, problem7),
-						 	 	 (9, problem9), (10, problem10)]
-	Monad.when (Map.member (read n) problems) $ do
-		putStrLn $ "The answer to problem " ++ n ++ " is " ++ (show $ problems Map.! (read n))
+	forever $ do
+		putStrLn "Please enter the number of the problem you're seeking the answer for:"
+		n <- getLine
+		if(Map.member (read n) problems) 
+		then putStrLn $ "The answer to problem " ++ n ++ " is " ++ (show $ problems Map.! (read n))
+		else putStrLn "This problem doesn't have a solution yet!"
