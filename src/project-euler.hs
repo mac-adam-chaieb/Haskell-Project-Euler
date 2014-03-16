@@ -2,12 +2,17 @@
 -- Project Euler Solved Problems
 -- Author: Mohamed Adam Chaieb
 -----------------------------------------------------------------------------
+-- Description: This program prompts the user to enter a problem number, and 
+-- returns the answer. Solutions are then cached in a file in order to avoid 
+-- computing solutions multiple times.
+-----------------------------------------------------------------------------
 
 import Math.Numbers
 import Data.List
 import qualified Data.Map as Map
-import Control.Monad as Monad
---test
+import Control.Monad
+import System.IO
+
 -- Mapping of the problem numbers
 problems = Map.fromList [(1, problem1),
 						 (2, problem2),
@@ -49,8 +54,18 @@ problem10 = sum $ primesUpTo 2000000
 main = do
 	putStrLn "Welcome to the Project Euler Problem Solver!"
 	forever $ do
-		putStrLn "Please enter the number of the problem you're seeking the answer for:"
-		n <- getLine
-		if(Map.member (read n) problems) 
-		then putStrLn $ "The answer to problem " ++ n ++ " is " ++ (show $ problems Map.! (read n))
-		else putStrLn "This problem doesn't have a solution yet!"
+			--First read the exisiting solutions, store them in solutionMap
+			readValue <- readFile "solutions.txt"
+			text <- return readValue
+			let solutionMap = Map.fromList $ map (\x -> (case x of [a,b] -> (a,b))) $ map words $ lines text
+			putStrLn "Please enter the number of the problem you're seeking the answer for:"
+			n <- getLine
+			if(Map.member n solutionMap) 
+			then putStrLn $ "The answer to problem " ++ n ++ " is " ++ (show $ solutionMap Map.! n)
+			else if(Map.member (read n) problems)
+				 then do
+				 	putStrLn $ "Computing the answer to problem " ++ n ++ "..."
+				 	putStrLn $ "The answer to problem " ++ n ++ " is " ++ (show $ problems Map.! (read n))
+				 	-- write the solution to the solutions file
+				 	appendFile "solutions.txt" $ n ++ "\t" ++ (show $ problems Map.! (read n)) ++ "\n"
+				 else putStrLn "This problem doesn't have a solution yet!"
