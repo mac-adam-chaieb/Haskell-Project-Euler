@@ -21,7 +21,8 @@ problems = Map.fromList [(1, problem1),
 						 (6, problem6),
 						 (7, problem7),
 						 (9, problem9),
-						 (10, problem10)]
+						 (10, problem10),
+						 (15, problem15)]
 
 problem1 :: Integer
 problem1 = sum $ filter (isMultipleOfOne [3,5]) [1..999]
@@ -51,21 +52,24 @@ problem9 = product $ head [[a,b,c] | a<-[200..1000], b<-[a..1000], c<-[b..1000],
 problem10 :: Integer
 problem10 = sum $ primesUpTo 2000000
 
+problem15 :: Integer
+problem15 = pascal 40 20
+
 main = do
 	putStrLn "Welcome to the Project Euler Problem Solver!"
 	forever $ do
-			--First read the exisiting solutions, store them in solutionMap
-			readValue <- readFile "solutions.txt"
-			text <- return readValue
-			let solutionMap = Map.fromList $ map (\x -> (case x of [a,b] -> (a,b))) $ map words $ lines text
-			putStrLn "Please enter the number of the problem you're seeking the answer for:"
-			n <- getLine
-			if(Map.member n solutionMap) 
-			then putStrLn $ "The answer to problem " ++ n ++ " is " ++ (show $ solutionMap Map.! n)
-			else if(Map.member (read n) problems)
-				 then do
-				 	putStrLn $ "Computing the answer to problem " ++ n ++ "..."
-				 	putStrLn $ "The answer to problem " ++ n ++ " is " ++ (show $ problems Map.! (read n))
-				 	-- write the solution to the solutions file
-				 	appendFile "solutions.txt" $ n ++ "\t" ++ (show $ problems Map.! (read n)) ++ "\n"
-				 else putStrLn "This problem doesn't have a solution yet!"
+		--First read the exisiting solutions, store them in solutionMap
+		readValue <- readFile "solutions.txt"
+		text <- return readValue
+		let solutionMap = Map.fromList $ map (\x -> (case x of [a,b] -> (a,b))) $ map words $ lines text
+		putStrLn "Please enter the number of the problem you're seeking the answer for:"
+		n <- getLine
+		if(Map.member n solutionMap) 
+		then putStrLn $ "The answer to problem " ++ n ++ " is " ++ (show $ solutionMap Map.! n)
+		else if(Map.member (read n) problems)
+			then do
+				putStrLn $ "Computing the answer to problem " ++ n ++ "..."
+				putStrLn $ "The answer to problem " ++ n ++ " is " ++ (show $ problems Map.! (read n))
+				-- write the solution to the solutions file
+				appendFile "solutions.txt" $ n ++ "\t" ++ (show $ problems Map.! (read n)) ++ "\n"
+			else putStrLn "This problem doesn't have a solution yet!"

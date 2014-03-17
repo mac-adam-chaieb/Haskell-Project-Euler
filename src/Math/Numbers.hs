@@ -21,7 +21,9 @@ module Math.Numbers
 	fibonacci,
 	fibonaccisUpTo,
 	triangle,
-	isPerfect
+	isPerfect,
+	pascal',
+	pascal
 )
 where
 
@@ -84,8 +86,8 @@ primeFactors n = primeFactors' n primes'
 			| otherwise = primeFactors' n l
 
 -- Returns a list of tuples where the first element is the prime factor and the second is its exponent
-primeDecompose :: Integer -> [(Integer, Int)]
-primeDecompose n = let l = primeFactors n in zip l $ map length $ group l
+primeDecompose :: Integer -> [(Integer, Integer)]
+primeDecompose n = let l = primeFactors n in zip l $ map toInteger $ map length $ group l
 
 -- Returns a list of divisors of a given number
 divisors :: Integer -> [Integer]
@@ -139,3 +141,14 @@ triangle n = sum [1..n]
 -- Checks if the number is perfect
 isPerfect :: Integer -> Bool
 isPerfect n = n == (sum $ init $ divisors n)
+
+-- Returns Pascal's triangle
+pascal' :: [[Integer]]
+pascal' = zipWith (\a b -> map combinations $ zip b a) (map (\x -> [0.. toInteger x]) [0..]) $ map (\y -> replicate (y+1) (toInteger y)) [0..]
+	where
+		combinations :: (Integer, Integer) -> Integer
+		combinations (n,m) = quot (factorial n) ((factorial m)*(factorial $ n-m))
+
+-- Return the (n,m) entry of Pascal's triangle
+pascal :: Int -> Int -> Integer
+pascal n m = (pascal' !! n) !! m
