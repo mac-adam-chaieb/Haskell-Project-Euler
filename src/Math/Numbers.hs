@@ -23,7 +23,8 @@ module Math.Numbers
 	triangle,
 	isPerfect,
 	pascal',
-	pascal
+	pascal,
+	collatz
 )
 where
 
@@ -152,3 +153,10 @@ pascal' = zipWith (\a b -> map combinations $ zip b a) (map (\x -> [0.. toIntege
 -- Return the (n,m) entry of Pascal's triangle
 pascal :: Int -> Int -> Integer
 pascal n m = (pascal' !! n) !! m
+
+-- Returns the Collatz sequence starting with the given number
+collatz :: Integer -> [Integer]
+collatz 1 = [1]
+collatz n
+	| mod n 2 == 0 = n:(collatz $ quot n 2)
+	| mod n 2 == 1 = n:(collatz $ (3*n)+1)

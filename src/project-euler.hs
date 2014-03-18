@@ -22,6 +22,7 @@ problems = Map.fromList [(1, problem1),
 						 (7, problem7),
 						 (9, problem9),
 						 (10, problem10),
+						 (14, problem14),
 						 (15, problem15)]
 
 problem1 :: Integer
@@ -51,6 +52,14 @@ problem9 = product $ head [[a,b,c] | a<-[200..1000], b<-[a..1000], c<-[b..1000],
 
 problem10 :: Integer
 problem10 = sum $ primesUpTo 2000000
+
+problem14 :: Integer
+problem14 = fst $ getMaxPair (0,0) $ map (\n -> (n, length $ collatz n)) [1..1000000]
+	where
+		-- uses an accumulator
+		getMaxPair :: Ord b => (a,b) ->[(a,b)] -> (a,b)
+		getMaxPair p [] = p 
+		getMaxPair p ((x,y):l) = if (y > snd p) then getMaxPair (x,y) l else getMaxPair p l
 
 problem15 :: Integer
 problem15 = pascal 40 20
